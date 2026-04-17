@@ -1,1 +1,2 @@
 # grupo2-proyecto-backend-film-app
+cosas nuevas
