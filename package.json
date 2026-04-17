@@ -1,0 +1,34 @@
+{
+  "name": "grupo2-proyecto-backend-film-app",
+  "version": "1.0.0",
+  "description": "Ejercicio grupo 2",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BV-Works/grupo2-proyecto-backend-film-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/BV-Works/grupo2-proyecto-backend-film-app/issues"
+  },
+  "homepage": "https://github.com/BV-Works/grupo2-proyecto-backend-film-app#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.4.2",
+    "ejs": "^5.0.2",
+    "express": "^5.2.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.4.1",
+    "morgan": "^1.10.1",
+    "pg": "^8.20.0",
+    "sequelize": "^6.37.8"
+  }
+}
