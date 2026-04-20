@@ -4,7 +4,7 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 
 const connectDB = require("../config/db_mongo");
-const pool = require("../config/db_pg"); // Credenciales de conexión a la base de datos
+const sequelize = require("../config/db_pg"); // Credenciales de conexión a la base de datos
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -41,11 +41,21 @@ app.use((err, req, res, next) => {
 connectDB();
 
 // Test DB
-pool
-  .connect()
-  .then(() => console.log("Postgre conectada"))
-  .catch((err) => console.error("Error DB:", err));
+const startDB = async () => {
+  try{
+    await sequelize.authenticate(); 
+    console.log("DB connected"); 
+    await sequelize.sync({ force: false }); 
+    console.log("Sync'd models"); 
 
-app.listen(PORT, () => {
-  console.log(`API escuchando en http://localhost:${PORT}`);
-});
+    app.listen(PORT, () => {
+      console.log(`API listening at Port: ${PORT}`);
+    });
+  } catch (error) {
+    console.log("DB error:", error); 
+  }
+}
+
+startDB(); 
+
+
