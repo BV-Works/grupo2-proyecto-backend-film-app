@@ -4,6 +4,8 @@ const helmet = require("helmet");
 const connectDB = require("../config/db_mongo");
 const sequelize = require("../config/db_pg"); // Credenciales de conexión a la base de datos
 
+const routesFilms = require("./routes/filmsRoutes")
+
 require("dotenv").config();
 
 const app = express();
@@ -14,9 +16,11 @@ app.use(morgan("dev")); // console.log de las peticiones al servidor para facili
 app.use(helmet()); // Securización de cabeceras HTTP
 app.use(express.json());
 
-app.get("/", (_req, res) => {
-  res.json({ message: "funciona" });
-});
+app.use("/api/movies", routesFilms)
+
+// app.get("/", (_req, res) => {
+//   res.json({ message: "funciona" });
+// });
 
 app.use((req, res) => {
   res.status(404).json({ message: "Ruta no encontrada" });
