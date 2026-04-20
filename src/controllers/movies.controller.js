@@ -39,13 +39,14 @@ const getRandomMovies = async (req, res) => {
       "action",
       "love",
       "war",
-      "star",
-      "dark",
-      "man",
-      "night",
-      "dead",
-      "love",
-      "the"
+      "terror",
+      "romantic",
+      "crime",
+      "drama",
+      "thriller",
+      "comedy",
+      "adventure",
+      "sci-fi",
     ];
 
     const randomKeyword =
@@ -62,11 +63,17 @@ const getRandomMovies = async (req, res) => {
       return res.status(404).json({ error: movies.Error });
     }
 
-    // 🔥 mezclamos y limitamos resultados
+    if (!movies.Search || !Array.isArray(movies.Search)) {
+      return res.status(404).json({
+        error: "No se encontraron películas"
+      });
+    }
+
     const shuffled = movies.Search.sort(() => 0.5 - Math.random());
     const limited = shuffled.slice(0, 10);
 
     res.json(limited);
+
   } catch (error) {
     console.error("Error random movies:", error.message);
     res.status(500).json({ error: "Error obteniendo películas random" });
@@ -102,5 +109,4 @@ const getMovieById = async (req, res) => {
   }
 };
 
-
-module.exports = { getMovies, getRandomMovies };
+module.exports = { getMovies, getRandomMovies, getMovieById };

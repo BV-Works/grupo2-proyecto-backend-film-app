@@ -1,6 +1,6 @@
-const axios = require('axios');
+const axios = require("axios");
 
-const BASE_URL = 'https://www.omdbapi.com/';
+const BASE_URL = "https://www.omdbapi.com/";
 
 const fetchMovies = async (params = {}) => {
   try {
@@ -13,15 +13,14 @@ const fetchMovies = async (params = {}) => {
     const response = await axios.get(BASE_URL, {
       params: {
         apikey: apiKey,
-        ...params
-      }
+        ...params,
+      },
     });
 
     return response.data;
-
   } catch (error) {
-    console.error("Fetch error:", error.message);
-    throw error;
+    console.error("FETCH ERROR:", error);
+    res.status(500).json({ error: error.message });
   }
 };
 
