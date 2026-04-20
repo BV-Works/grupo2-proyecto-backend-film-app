@@ -1,8 +1,8 @@
 const express = require("express");
 const morgan = require("morgan");
 const helmet = require("helmet");
-const connectDB = require("./config/db_mongo");
-const pool = require("./config/db_pg"); // Credenciales de conexión a la base de datos
+const connectDB = require("../config/db_mongo");
+const pool = require("../config/db_pg"); // Credenciales de conexión a la base de datos
 
 require("dotenv").config();
 
