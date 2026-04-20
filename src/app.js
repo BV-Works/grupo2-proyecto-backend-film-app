@@ -11,8 +11,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middlewares
-app.use(morgan("dev"));
-app.use(helmet());
+app.use(morgan("dev")); // console.log de las peticiones al servidor para facilitar el desarrollo y debugging
+app.use(helmet());  // Securización de cabeceras HTTP
 app.use(express.json());
 
 // Rutas
@@ -22,7 +22,7 @@ app.get("/", (_req, res) => {
   res.json({ message: "funciona" });
 });
 
-app.use('/api', moviesRoutes);
+app.use("/api", moviesRoutes);
 
 // 404
 app.use((req, res) => {
@@ -32,24 +32,35 @@ app.use((req, res) => {
 // 500
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ error: 'Error interno del servidor' });
+  res.status(500).json({ message: "Error interno del servidor" });
+});
+
+// Seguridad runtime (mínimo)
+process.on("unhandledRejection", (err) => {
+  console.error("Unhandled Rejection:", err);
+});
+
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception:", err);
 });
 
 // Start server and bbdds
 const startServer = async () => {
   try {
-    await sequelize.authenticate();
-    console.log("PostgreSQL connected");
+    await Promise.all([
+      sequelize.authenticate(),
+      connectDB()
+    ]);
 
-    await sequelize.sync(); // solo desarrollo
+    console.log("Databases connected");
+
+    await sequelize.sync({ force: false });
     console.log("Models synced");
-
-    await connectDB();
-    console.log("MongoDB connected");
 
     app.listen(PORT, () => {
       console.log(`API listening at http://localhost:${PORT}`);
     });
+
   } catch (error) {
     console.error("Startup error:", error);
     process.exit(1);
