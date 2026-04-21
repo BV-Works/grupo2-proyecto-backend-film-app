@@ -3,6 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 const helmet = require("helmet");
+const cookieParser = require("cookie-parser");
 
 const connectDB = require("../config/db_mongo");
 const sequelize = require("../config/db_pg");
@@ -14,8 +15,10 @@ const PORT = process.env.PORT || 3000;
 app.use(morgan("dev")); // console.log de las peticiones al servidor para facilitar el desarrollo y debugging
 app.use(helmet()); // Securización de cabeceras HTTP
 app.use(express.json());
+app.use(cookieParser());
 
 // Rutas
+const authRoutes = require("./routes/auth.routes");
 const favoritesRoutes = require("./routes/favorites.routes");
 const usersRoutes = require("./routes/users.routes");
 const filmsRoutes = require("./routes/films.routes");
@@ -24,6 +27,7 @@ app.get("/", (_req, res) => {
   res.json({ message: "funciona" });
 });
 
+app.use("/api", authRoutes);
 app.use("/api", favoritesRoutes);
 app.use("/api", usersRoutes);
 app.use("/api", filmsRoutes);

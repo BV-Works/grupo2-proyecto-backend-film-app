@@ -1,11 +1,19 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { getAllUsers, getUser, createUser, updateUser, deleteUser } = require('../controllers/users.controller');
+const {
+  getAllUsers,
+  getUser,
+  updateUser,
+  deleteUser,
+} = require("../controllers/users.controller");
+const {
+  authenticateJWT,
+  authorizeAdmin,
+} = require("../middlewares/auth.middleware");
 
-router.get('/users', getAllUsers); // todos los usuarios (Solo el admin)
-router.get('/user/:id', getUser);  // perfil de un usuario
-router.post('/signup', createUser); // crear usuario
-router.put('/user/:id', updateUser); // editar usuario
-router.delete('/user/:id', deleteUser); // borrar usuario (Solo el admin)
+router.get("/users", authenticateJWT, authorizeAdmin, getAllUsers); // todos los usuarios (Solo el admin)
+router.get("/user/:id", authenticateJWT, authorizeAdmin, getUser); // perfil de un usuario
+router.put("/user/:id", authenticateJWT, authorizeAdmin, updateUser); // editar usuario
+router.delete("/user/:id", authenticateJWT, authorizeAdmin, deleteUser); // borrar usuario (Solo el admin)
 
 module.exports = router;
