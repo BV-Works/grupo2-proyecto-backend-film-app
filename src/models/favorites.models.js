@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize"); 
-const sequelize = require("../../config/db_pg.js");  
+const sequelize = require("../../config/db_pg.js"); 
 
 const Favorite = sequelize.define("favorite", {
     id: {
@@ -17,7 +17,7 @@ const Favorite = sequelize.define("favorite", {
         allowNull: false, 
     }, 
     movieSourceId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false, 
 
     }
