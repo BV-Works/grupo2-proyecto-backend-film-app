@@ -15,7 +15,7 @@ const getMovies = async (req, res) => {
       params.page = page || 1;
     } else {
       return res.status(400).json({
-        error: 'Debes proporcionar al menos un parámetro: t, i, o s'
+        error: 'Debes proporcionar al menos un parámetro: t=título, i=IMDb ID, o s=busqueda'
       });
     }
 
