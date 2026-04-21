@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getAllUsers, getUser, createUser, updateUser, deleteUser } = require('../controllers/usersController');
+const { getAllUsers, getUser, createUser, updateUser, deleteUser } = require('../controllers/users.controller');
 
 router.get('/users', getAllUsers); // todos los usuarios (Solo el admin)
 router.get('/user/:id', getUser);  // perfil de un usuario

@@ -12,23 +12,23 @@ const PORT = process.env.PORT || 3000;
 
 // Middlewares
 app.use(morgan("dev")); // console.log de las peticiones al servidor para facilitar el desarrollo y debugging
-app.use(helmet());  // Securización de cabeceras HTTP
+app.use(helmet()); // Securización de cabeceras HTTP
 app.use(express.json());
 
 // Rutas
 const moviesRoutes = require("./routes/movies.routes");
-const favoritesRoutes = require("./routes/favorites.routes"); 
+const favoritesRoutes = require("./routes/favorites.routes");
+const usersRoutes = require("./routes/users.routes");
+const routesFilms = require("./routes/films.routes");
 
-const usersRoutes = require("./routes/usersRoutes")
-const routesFilms = require("./routes/filmsRoutes")
 app.get("/", (_req, res) => {
   res.json({ message: "funciona" });
 });
 
 app.use("/api", moviesRoutes);
-app.use("/api", favoritesRoutes); 
-app.use('/api', usersRoutes)
-app.use("/api/films", routesFilms)
+app.use("/api", favoritesRoutes);
+app.use("/api", usersRoutes);
+app.use("/api/films", routesFilms);
 
 // 404
 app.use((req, res) => {
@@ -53,10 +53,7 @@ process.on("uncaughtException", (err) => {
 // Start server and bbdds
 const startServer = async () => {
   try {
-    await Promise.all([
-      sequelize.authenticate(),
-      connectDB()
-    ]);
+    await Promise.all([sequelize.authenticate(), connectDB()]);
 
     console.log("Databases connected");
 
@@ -66,7 +63,6 @@ const startServer = async () => {
     app.listen(PORT, () => {
       console.log(`API listening at http://localhost:${PORT}`);
     });
-
   } catch (error) {
     console.error("Startup error:", error);
     process.exit(1);
