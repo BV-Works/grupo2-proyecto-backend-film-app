@@ -1,16 +1,12 @@
-require("dotenv").config();
-
 const { Sequelize } = require("sequelize");
 
-if (
-  !process.env.DB_HOST ||
-  !process.env.DB_USER ||
-  !process.env.DB_PORT ||
-  !process.env.DB_DATABASE ||
-  !process.env.DB_PASSWORD
-) {
-  throw new Error("Missing environment variables");
-}
+const requiredEnv = ["DB_HOST", "DB_USER", "DB_PORT", "DB_DATABASE", "DB_PASSWORD"];
+
+requiredEnv.forEach((env) => {
+  if (!process.env[env]) {
+    throw new Error(`Missing env var: ${env}`);
+  }
+});
 
 const sequelize = new Sequelize(
   process.env.DB_DATABASE,
