@@ -16,19 +16,17 @@ app.use(helmet()); // Securización de cabeceras HTTP
 app.use(express.json());
 
 // Rutas
-const moviesRoutes = require("./routes/movies.routes");
 const favoritesRoutes = require("./routes/favorites.routes");
 const usersRoutes = require("./routes/users.routes");
-const routesFilms = require("./routes/films.routes");
+const filmsRoutes = require("./routes/films.routes");
 
 app.get("/", (_req, res) => {
   res.json({ message: "funciona" });
 });
 
-app.use("/api", moviesRoutes);
 app.use("/api", favoritesRoutes);
 app.use("/api", usersRoutes);
-app.use("/api/films", routesFilms);
+app.use("/api", filmsRoutes);
 
 // 404
 app.use((req, res) => {

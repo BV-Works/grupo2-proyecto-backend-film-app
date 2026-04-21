@@ -1,8 +1,98 @@
 const Films = require("../models/Films");
+const fetchMovies = require('../utils/fetch-movies.utils.js');
+// GLOBAL
+// get pelicula en ombd y si no tiene en mongodb 
+const getMovies = async (req, res) => {
+  try {
+    const { t, i } = req.query;
 
+    let params = {};
+    let moviesFromMongo = [];
+
+    if (i) {
+      params.i = i;
+    } else if (t) {
+      params.t = t;
+    } else {
+      return res.status(400).json({
+        error: 'Debes proporcionar al menos un parámetro: t=título, i=IMDb ID'
+      });
+    }
+
+    const movies = await fetchMovies(params);
+
+    if (movies.Response === 'False') {
+      if (t) {
+        moviesFromMongo = await Films.find({ title: t });
+      } else if (i) {
+        moviesFromMongo = await Films.find({ _id: i });
+      } 
+
+      if (moviesFromMongo.length === 0) {
+        return res.status(404).json({ error: movies.Error });
+      }
+    }
+    
+    res.json(movies.Response !== 'False' ? movies : moviesFromMongo);
+
+  } catch (error) {
+    console.error('Error en OMDB API:', error.message);
+    res.status(500).json({ error: 'Error al conectar con OMDB' });
+  }
+};
+
+// get unas cuantas peliculas random para la home de usuario (solo ombd)
+const getRandomMoviesHome = async (req, res) => {
+  try {
+    const keywords = [
+      "action",
+      "love",
+      "war",
+      "terror",
+      "romantic",
+      "crime",
+      "drama",
+      "thriller",
+      "comedy",
+      "adventure",
+      "sci-fi",
+    ];
+
+    const randomKeyword =
+      keywords[Math.floor(Math.random() * keywords.length)];
+
+    const page = Math.floor(Math.random() * 5) + 1;
+
+    const movies = await fetchMovies({
+      s: randomKeyword,
+      page
+    });
+
+    if (movies.Response === "False") {
+      return res.status(404).json({ error: movies.Error });
+    }
+
+    if (!movies.Search || !Array.isArray(movies.Search)) {
+      return res.status(404).json({
+        error: "No se encontraron películas"
+      });
+    }
+
+    const shuffled = movies.Search.sort(() => 0.5 - Math.random());
+    const limited = shuffled.slice(0, 10);
+
+    res.json(limited);
+
+  } catch (error) {
+    console.error("Error random movies:", error.message);
+    res.status(500).json({ error: "Error obteniendo películas random" });
+  }
+};
+
+// MONGO
 // GET
 // http://localhost:3000/api/movies
-const getFilms = async (req, res) => {
+const getFilmsAdmin = async (req, res) => {
   try {
     const films = await Films.find();
 
@@ -19,7 +109,7 @@ const getFilms = async (req, res) => {
   }
 };
 
-// GET
+// GET pelicula por id en mongodb
 // http://localhost:3000/api/movies/(id)
 const getFilmById = async (req, res) => {
   const id = req.params.id;
@@ -143,7 +233,9 @@ const deleteFilm = async (req, res) => {
 };
 
 module.exports = {
-  getFilms,
+  getMovies,
+  getRandomMoviesHome,
+  getFilmsAdmin,
   getFilmById,
   createFilm,
   updateFilm,
