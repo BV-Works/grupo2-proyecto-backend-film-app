@@ -33,7 +33,7 @@ const register = async (req, res) => {
       message: "User registered successfully",
       user: {
         id: user.id,
-        username: user.username,
+        name: user.name,
         role: user.role,
       },
     });
@@ -78,7 +78,7 @@ const login = async (req, res) => {
 
     return res.status(200).json({ accessToken });
   } catch (error) {
-    return res.status(500).json({ message: "Database error" });
+    return res.status(500).json({ message: `Database error: ${error}` });
   }
 };
 
