@@ -23,22 +23,6 @@ const getUser = async (req, res) => {
   }
 };
 
-// Crear usuario
-const createUser = async (req, res) => {
-  try {
-    const { name, email, password, role } = req.body; // Desestructura los campos del body
-    if (!name || !email || !password) { //Validacion de campos
-      return res.status(400).json({ message: "Faltan campos obligatorios" });
-    }
-    const newUser = await User.create({ name, email, password, role }); // Crea el usuario en la base de datos
-    res.status(201).json(newUser); // Devuelve el usuario creado con status 201 (creado)
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error al crear el usuario", error: error.message });
-  }
-};
-
 // Editar usuario
 const updateUser = async (req, res) => {
   try {
@@ -70,4 +54,9 @@ const deleteUser = async (req, res) => {
   }
 };
 
-module.exports = { getAllUsers, getUser, createUser, updateUser, deleteUser };
+module.exports = {
+  getAllUsers,
+  getUser,
+  updateUser,
+  deleteUser,
+};
