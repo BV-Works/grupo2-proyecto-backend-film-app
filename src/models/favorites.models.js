@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize"); 
-const sequelize = require("../../config/db_pg.js");  
+const sequelize = require("../../config/db_pg.js"); 
 
 const Favorite = sequelize.define("favorite", {
     id: {

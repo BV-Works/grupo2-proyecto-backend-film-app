@@ -1,8 +1,8 @@
-const Favorite = require("../models/favorites.models"); 
+const { Favorite, User } = require("../models"); 
 
 const getFavorites = async (req, res) => {
     try {
-        const userId = req.query.userId || 1; 
+        const userId = Number(req.query.userId); 
 
         if (userId) {
             const favorites = await Favorite.findAll({ 
