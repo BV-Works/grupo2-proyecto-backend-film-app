@@ -17,12 +17,13 @@ app.use(express.json());
 
 // Rutas
 const moviesRoutes = require("./routes/movies.routes");
-
+const usersRoutes = require("./routes/usersRoutes")
 app.get("/", (_req, res) => {
   res.json({ message: "funciona" });
 });
 
 app.use("/api", moviesRoutes);
+app.use('/api', usersRoutes)
 
 // 404
 app.use((req, res) => {
