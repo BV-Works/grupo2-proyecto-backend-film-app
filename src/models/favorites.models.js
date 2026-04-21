@@ -17,7 +17,7 @@ const Favorite = sequelize.define("favorite", {
         allowNull: false, 
     }, 
     movieSourceId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false, 
 
     }
