@@ -19,12 +19,16 @@ app.use(express.json());
 const moviesRoutes = require("./routes/movies.routes");
 const favoritesRoutes = require("./routes/favorites.routes"); 
 
+const usersRoutes = require("./routes/usersRoutes")
+const routesFilms = require("./routes/filmsRoutes")
 app.get("/", (_req, res) => {
   res.json({ message: "funciona" });
 });
 
 app.use("/api", moviesRoutes);
 app.use("/api", favoritesRoutes); 
+app.use('/api', usersRoutes)
+app.use("/api/films", routesFilms)
 
 // 404
 app.use((req, res) => {
