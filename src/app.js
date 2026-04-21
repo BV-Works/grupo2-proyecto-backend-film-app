@@ -17,6 +17,8 @@ app.use(express.json());
 
 // Rutas
 const moviesRoutes = require("./routes/movies.routes");
+const favoritesRoutes = require("./routes/favorites.routes"); 
+
 const usersRoutes = require("./routes/usersRoutes")
 const routesFilms = require("./routes/filmsRoutes")
 app.get("/", (_req, res) => {
@@ -24,6 +26,7 @@ app.get("/", (_req, res) => {
 });
 
 app.use("/api", moviesRoutes);
+app.use("/api", favoritesRoutes); 
 app.use('/api', usersRoutes)
 app.use("/api/films", routesFilms)
 
