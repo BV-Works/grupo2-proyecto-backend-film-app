@@ -1,0 +1,371 @@
+/* ===== VARIABLES ===== */
+:root {
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #141414;
+  --bg-card: #1a1a1a;
+  --color-primary: #e50914;
+  --color-primary-hover: #b20710;
+  --text-primary: #ffffff;
+  --text-secondary: #b3b3b3;
+  --border-color: #2a2a2a;
+  --border-radius: 8px;
+  --font: 'Segoe UI', sans-serif;
+}
+
+/* ===== RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font);
+  min-height: 100vh;
+}
+
+a {
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+/* ===== CONTENEDOR ===== */
+.container {
+  width: 100%;
+  padding: 20px 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ===== MENÚ ===== */
+.menu {
+  background-color: var(--bg-secondary);
+  padding: 14px 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.menu a,
+.menu button {
+  color: var(--text-secondary);
+  font-size: 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: color 0.2s;
+  line-height: 1;
+  padding: 0;
+  vertical-align: middle;
+}
+
+.menu a:hover,
+.menu button:hover {
+  color: var(--text-primary);
+}
+
+/* ===== TÍTULOS ===== */
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+h2 {
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+/* ===== BOTONES ===== */
+.btn {
+  display: inline-block;
+  background-color: var(--color-primary);
+  color: var(--text-primary);
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: background-color 0.2s;
+  text-align: center;
+}
+
+.btn:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.btn-google {
+  background-color: #ffffff;
+  color: #333333;
+}
+
+.btn-google:hover {
+  background-color: #e8e8e8;
+}
+
+.btn-github {
+  background-color: #24292e;
+  color: #ffffff;
+  border: 1px solid #444;
+}
+
+.btn-github:hover {
+  background-color: #1a1e22;
+}
+
+/* ===== FORMULARIOS ===== */
+form, #movie-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 24px;
+}
+
+input {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 12px 14px;
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  font-family: var(--font);
+  width: 100%;
+}
+
+input::placeholder {
+  color: var(--text-secondary);
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+/* ===== PÁGINAS CENTRADAS ===== */
+.page-centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 60px);
+  padding: 20px 16px;
+  text-align: center;
+}
+
+.page-centered form,
+.page-centered .oauth-buttons,
+.page-centered .buttons {
+  width: 100%;
+  max-width: 400px;
+}
+
+.page-centered p {
+  margin-top: 16px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+/* ===== OAUTH BUTTONS ===== */
+.oauth-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  width: 100%;
+  max-width: 400px;
+  margin: 16px 0;
+}
+
+.oauth-buttons .btn {
+  flex: 1;
+  text-align: center;
+}
+
+/* ===== GRID DE PELÍCULAS ===== */
+#movies-grid,
+#favorites-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 20px;
+}
+
+/* ===== TARJETA DE PELÍCULA ===== */
+.movie-card {
+  background-color: var(--bg-card);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.movie-card img {
+  width: 100%;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+}
+
+.movie-card h3 {
+  font-size: 14px;
+  padding: 10px 10px 4px;
+}
+
+.movie-card p {
+  font-size: 12px;
+  color: var(--text-secondary);
+  padding: 0 10px 10px;
+}
+
+.movie-card .btn {
+  margin: 0 10px 10px;
+  font-size: 12px;
+  padding: 8px 12px;
+}
+
+/* ===== DETALLE DE PELÍCULA ===== */
+.movie-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.movie-detail img {
+  width: 100%;
+  max-width: 300px;
+  border-radius: var(--border-radius);
+}
+
+.movie-info h1 {
+  font-size: 22px;
+  margin-bottom: 12px;
+}
+
+.movie-info p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.movie-info strong {
+  color: var(--text-primary);
+}
+
+.movie-info .btn {
+  margin-top: 16px;
+}
+
+/* ===== BUSCADOR ===== */
+.search-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.search-bar input {
+  flex: 1;
+}
+
+.search-bar .btn {
+  flex-shrink: 0;
+}
+
+/* ===== USUARIOS ===== */
+#users-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.user-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-card p {
+  flex: 1;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.user-card .btn {
+  font-size: 12px;
+  padding: 6px 12px;
+}
+
+/* ===== MOVIES LIST ADMIN ===== */
+#movies-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 20px;
+}
+
+/* ===== PÁGINA DE INICIO ===== */
+.buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+/* ===== TABLET ===== */
+@media (min-width: 600px) {
+  h1 {
+    font-size: 28px;
+  }
+
+  #movies-grid,
+  #favorites-grid,
+  #movies-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .movie-detail {
+    flex-direction: row;
+  }
+
+  .movie-detail img {
+    width: 250px;
+    flex-shrink: 0;
+  }
+}
+
+/* ===== DESKTOP ===== */
+@media (min-width: 1024px) {
+  .container {
+    padding: 30px 40px;
+  }
+
+  #movies-grid,
+  #favorites-grid,
+  #movies-list {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  h1 {
+    font-size: 32px;
+  }
+}
