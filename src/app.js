@@ -28,7 +28,7 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(openapiDocument));
 
 
 // Esto es FUNDAMENTAL porque: EJS genera HTML pero el navegador necesita:CSS y js e imagenes
-app.use(express.static('./src/public'));
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Rutas
 const authRoutes = require("./routes/auth.routes");
