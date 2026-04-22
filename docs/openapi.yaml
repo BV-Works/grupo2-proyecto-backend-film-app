@@ -1,0 +1,276 @@
+openapi: 3.0.0
+info:
+  title: ProyectoBack
+  version: 1.0.0
+servers:
+  - url: /
+    description: API same origin
+paths:
+  /api/users:
+    get:
+      tags:
+        - General
+      summary: Get users
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/user/{id}:
+    get:
+      tags:
+        - General
+      summary: Get user/id
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    put:
+      tags:
+        - General
+      summary: Put User
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: Elena
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/login:
+    post:
+      tags:
+        - General
+      summary: Login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: brasilcampeaodomundofuchibol@gmail.com
+                password: "123456"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/signup:
+    post:
+      tags:
+        - General
+      summary: Post User signup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: Margarita
+                email: margarita@test.com
+                password: marga123
+                role: user
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/user/{id}:
+    delete:
+      tags:
+        - General
+      summary: Delete User
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/films:
+    post:
+      tags:
+        - General
+      summary: Post films
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                title: Inception
+                poster: url
+                year: 2010
+                director: Christopher Nolan
+                genre: Distopía
+                runtime: 148
+                plot: Un ladrón roba secretos entrando en los sueños
+                actors:
+                  - Leonardo DiCaprio
+                  - Joseph Gordon-Levitt
+                rating:
+                  - value: 8
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - General
+      summary: Get flims/title
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: t
+          in: query
+          schema:
+            type: string
+          example: matrix
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/films/admin:
+    get:
+      tags:
+        - General
+      summary: Get Films/admin
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/films/{id}:
+    put:
+      tags:
+        - General
+      summary: Films/id/admin
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                title: Incepcion
+                year: 2011
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - General
+      summary: Films/id/admin
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/favorites:
+    get:
+      tags:
+        - General
+      summary: Favorites
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: userId
+          in: query
+          schema:
+            type: integer
+          example: "1"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - General
+      summary: Favorite
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                userID: 1
+                movieSource: omdb
+                movieSourceId: "67658765"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/favorites/{id}:
+    delete:
+      tags:
+        - General
+      summary: Favorite
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
