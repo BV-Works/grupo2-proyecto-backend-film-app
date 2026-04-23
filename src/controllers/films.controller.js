@@ -7,7 +7,7 @@ const getMovies = async (req, res) => {
     const { t, i, s } = req.query;
 
     let params = {};
-    let moviesFromMongo = [];
+    let moviesFromMongo = {Search: []};
 
     if (i) {
       params.i = i;
@@ -17,21 +17,23 @@ const getMovies = async (req, res) => {
       params.s = s;
     } else {
       return res.status(400).json({
-        error: "Debes proporcionar al menos un parámetro: t=título, i=IMDb ID",
+        error:
+          "Debes proporcionar al menos un parámetro: t=título, i=IMDb ID, s=search",
       });
     }
 
     const movies = await fetchMovies(params);
 
     if (movies.Response === "False") {
-      let moviesFromMongo = [];
       if (t) {
-        moviesFromMongo = await Films.find({ title: t });
+        moviesFromMongo.Search = await Films.find({ title: t });
       } else if (i) {
-        moviesFromMongo = await Films.find({ _id: i });
+        moviesFromMongo.Search = await Films.find({ _id: i });
+      } else if (s) {
+        moviesFromMongo.Search = await Films.find({ title: s });
       }
 
-      if (moviesFromMongo.length === 0) {
+      if (moviesFromMongo.Search.length === 0) {
         return res.status(404).json({ error: movies.Error });
       }
     }
