@@ -1,0 +1,29 @@
+<!-- crear la vista de registro. -->
+<%- include('partials/header') %> <%- include('partials/menu') %>
+
+<main class="container">
+  <h1>Registro</h1>
+  <form id="signupForm">
+    <input type="text" id="name" placeholder="Nombre" required />
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Contraseña" required />
+    <input
+      type="password"
+      id="verifyPassword"
+      placeholder="Repetir contraseña"
+      required
+    />
+    <button type="submit" class="btn">Registrarse</button>
+  </form>
+
+  <!-- MEJORA: COMENTADA ESTRUCTURA HASTA QUE AÑADAMOS LOGIN CON GOOGLE Y GITHUB -->
+
+  <!-- <div class="oauth-buttons">
+    <a href="/api/auth/google" class="btn btn-google">Registrarse con Google</a>
+    <a href="/api/auth/github" class="btn btn-github">Registrarse con GitHub</a>
+  </div> -->
+
+  <p><a href="/login">¿Ya tienes cuenta? Inicia sesión</a></p>
+</main>
+
+<%- include('partials/footer') %>

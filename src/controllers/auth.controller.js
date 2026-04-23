@@ -76,7 +76,7 @@ const login = async (req, res) => {
       maxAge: 20 * 60 * 1000,
     });
 
-    return res.status(200).json({ accessToken });
+    return res.status(200).json({  mensaje: 'Login correcto', role: user.role, accessToken });
   } catch (error) {
     return res.status(500).json({ message: `Database error: ${error}` });
   }
@@ -84,6 +84,7 @@ const login = async (req, res) => {
 
 const logout = (_req, res) => {
   res.clearCookie("accessToken");
+  res.redirect('/home');
   return res.status(200).json({ message: "Sesion cerrada" });
 };
 
