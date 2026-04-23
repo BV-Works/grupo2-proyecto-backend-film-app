@@ -9,7 +9,7 @@
   --text-secondary: #b3b3b3;
   --border-color: #2a2a2a;
   --border-radius: 8px;
-  --font: 'Segoe UI', sans-serif;
+  --font: "Segoe UI", sans-serif;
 }
 
 /* ===== RESET ===== */
@@ -124,7 +124,8 @@ h2 {
 }
 
 /* ===== FORMULARIOS ===== */
-form, #movie-form {
+form,
+#movie-form {
   display: flex;
   flex-direction: column;
   gap: 12px;

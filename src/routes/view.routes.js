@@ -20,11 +20,6 @@ router.get('/signup', (req, res) => {
   res.render('signup', { title: 'Registro', user: null, page: 'signup' });
 });
 
-// Dashboard
-router.get('/dashboard', authenticateJWT, (req, res) => {
-  res.render('dashboard', { title: 'Dashboard', user: req.user, page: 'dashboard' });
-});
-
 // Admin - Admin Movies
 router.get('/admin-movies', authenticateJWT, (req, res) => {
   res.render('admin-movies', { title: 'Gestion de películas', user: req.user, page: 'admin-movies' });
@@ -33,6 +28,11 @@ router.get('/admin-movies', authenticateJWT, (req, res) => {
 // Admin - usuarios
 router.get('/admin-users', authenticateJWT, (req, res) => {
   res.render('admin-users', { title: 'Usuarios', user: req.user, page: 'admin-users' });
+});
+
+// Dashboard
+router.get('/dashboard', authenticateJWT, (req, res) => {
+  res.render('dashboard', { title: 'Dashboard', user: req.user, page: 'dashboard' });
 });
 
 
