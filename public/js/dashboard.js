@@ -27,16 +27,16 @@ const loadMovies = async () => {
     .join("");
 };
 
-const addFavorite = async (movie_ref, movie_source) => {
-  const res = await fetch("/api/favorites", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ movie_ref, movie_source }),
-  });
+// const addFavorite = async (movie_ref, movie_source) => {
+//   const res = await fetch("/api/favorites", {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify({ movie_ref, movie_source }),
+//   });
 
-  const data = await res.json();
-  alert(data.mensaje || data.error);
-};
+//   const data = await res.json();
+//   alert(data.mensaje || data.error);
+// };
 
 const searchMovies = async () => {
   const title = document.getElementById("searchInput").value;

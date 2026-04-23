@@ -32,7 +32,6 @@ router.get('/admin-users', authenticateJWT, (req, res) => {
 
 // Dashboard
 router.get('/dashboard', authenticateJWT, (req, res) => {
-  console.log(req.user);
   res.render('dashboard', { title: 'Dashboard', user: req.user, page: 'dashboard' });
 });
 
