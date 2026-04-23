@@ -13,7 +13,6 @@ document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
   });
 
   const data = await res.json();
-  debugger
   if (res.ok) {
     if (data.role === "admin") {
       window.location.href = "/admin-movies";
