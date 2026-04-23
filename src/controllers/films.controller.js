@@ -1,10 +1,10 @@
 const Films = require("../models/Films");
-const fetchMovies = require('../utils/fetch-movies.utils.js');
+const fetchMovies = require("../utils/fetch-movies.utils.js");
 // GLOBAL
-// get pelicula en ombd y si no tiene en mongodb 
+// get pelicula en ombd y si no tiene en mongodb
 const getMovies = async (req, res) => {
   try {
-    const { t, i } = req.query;
+    const { t, i, s } = req.query;
 
     let params = {};
     let moviesFromMongo = [];
@@ -13,31 +13,33 @@ const getMovies = async (req, res) => {
       params.i = i;
     } else if (t) {
       params.t = t;
+    } else if (s) {
+      params.s = s;
     } else {
       return res.status(400).json({
-        error: 'Debes proporcionar al menos un parámetro: t=título, i=IMDb ID'
+        error: "Debes proporcionar al menos un parámetro: t=título, i=IMDb ID",
       });
     }
 
     const movies = await fetchMovies(params);
 
-    if (movies.Response === 'False') {
+    if (movies.Response === "False") {
+      let moviesFromMongo = [];
       if (t) {
         moviesFromMongo = await Films.find({ title: t });
       } else if (i) {
         moviesFromMongo = await Films.find({ _id: i });
-      } 
+      }
 
       if (moviesFromMongo.length === 0) {
         return res.status(404).json({ error: movies.Error });
       }
     }
-    
-    res.json(movies.Response !== 'False' ? movies : moviesFromMongo);
 
+    res.json(movies.Response !== "False" ? movies : moviesFromMongo);
   } catch (error) {
-    console.error('Error en OMDB API:', error.message);
-    res.status(500).json({ error: 'Error al conectar con OMDB' });
+    console.error("Error en OMDB API:", error.message);
+    res.status(500).json({ error: "Error al conectar con OMDB" });
   }
 };
 
@@ -58,14 +60,13 @@ const getRandomMoviesHome = async (req, res) => {
       "sci-fi",
     ];
 
-    const randomKeyword =
-      keywords[Math.floor(Math.random() * keywords.length)];
+    const randomKeyword = keywords[Math.floor(Math.random() * keywords.length)];
 
     const page = Math.floor(Math.random() * 5) + 1;
 
     const movies = await fetchMovies({
       s: randomKeyword,
-      page
+      page,
     });
 
     if (movies.Response === "False") {
@@ -74,7 +75,7 @@ const getRandomMoviesHome = async (req, res) => {
 
     if (!movies.Search || !Array.isArray(movies.Search)) {
       return res.status(404).json({
-        error: "No se encontraron películas"
+        error: "No se encontraron películas",
       });
     }
 
@@ -82,7 +83,6 @@ const getRandomMoviesHome = async (req, res) => {
     const limited = shuffled.slice(0, 10);
 
     res.json(limited);
-
   } catch (error) {
     console.error("Error random movies:", error.message);
     res.status(500).json({ error: "Error obteniendo películas random" });
@@ -239,5 +239,5 @@ module.exports = {
   getFilmById,
   createFilm,
   updateFilm,
-  deleteFilm
+  deleteFilm,
 };
