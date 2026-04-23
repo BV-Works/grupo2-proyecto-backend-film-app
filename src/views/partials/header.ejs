@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= title %></title>
-    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/style.css?v=2" />
     <% if (page === 'login') { %>
       <script src="/js/login.js" defer></script>
     <% } %>
@@ -13,6 +13,9 @@
     <% } %>
     <% if (page === 'admin-movies') { %>
       <script src="/js/admin-movies.js" defer></script>
+    <% } %>
+    <% if (page === 'admin-users') { %>
+      <script src="/js/admin-users.js" defer></script>
     <% } %>
   </head>
   <body>

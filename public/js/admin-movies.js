@@ -112,7 +112,6 @@ const loadMovies = async () => {
 };
 // crear peli mongo
 const saveMovie = async () => {
-  debugger;
   const id = document.getElementById("movie-id").value;
   const body = {
     title: document.getElementById("title").value,

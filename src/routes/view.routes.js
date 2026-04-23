@@ -30,5 +30,10 @@ router.get('/admin-movies', authenticateJWT, (req, res) => {
   res.render('admin-movies', { title: 'Gestion de películas', user: req.user, page: 'admin-movies' });
 });
 
+// Admin - usuarios
+router.get('/admin-users', authenticateJWT, (req, res) => {
+  res.render('admin-users', { title: 'Usuarios', user: req.user, page: 'admin-users' });
+});
+
 
 module.exports = router;

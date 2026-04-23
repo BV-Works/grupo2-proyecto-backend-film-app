@@ -2,8 +2,8 @@
  <nav class="menu">
   <% if (user) { %>
     <% if (user.role === 'admin') { %>
-      <a href="/users">Usuarios</a>
-      <a href="/movies">Películas</a>
+      <a href="/admin-users">Usuarios</a>
+      <a href="/admin-movies">Películas</a>
     <% } else { %>
       <a href="/dashboard">Inicio</a>
       <a href="/search">Buscador</a>
