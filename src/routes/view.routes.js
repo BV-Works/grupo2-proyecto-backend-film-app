@@ -7,10 +7,28 @@ const {
 
 // Vista de inicio
 router.get('/home', (req, res) => {
-  res.render('index', { title: 'Movie App Grupo 2' });
+  res.render('index', { title: 'Movie App Grupo 2', user: null, page: 'home'});
 });
 
+// Login
+router.get('/login', (req, res) => {
+  res.render('login', { title: 'Login', user: null, page: 'login' });
+});
 
+// Signup
+router.get('/signup', (req, res) => {
+  res.render('signup', { title: 'Registro', user: null, page: 'signup' });
+});
+
+// Dashboard
+router.get('/dashboard', authenticateJWT, (req, res) => {
+  res.render('dashboard', { title: 'Dashboard', user: req.user, page: 'dashboard' });
+});
+
+// Admin - Admin Movies
+router.get('/admin-movies', authenticateJWT, (req, res) => {
+  res.render('admin-movies', { title: 'Gestion de películas', user: req.user, page: 'admin-movies' });
+});
 
 
 module.exports = router;

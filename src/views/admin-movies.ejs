@@ -1,0 +1,28 @@
+<!-- vista de gestión de películas para el admin -->
+<%- include('partials/header') %> <%- include('partials/menu') %>
+
+<main class="container">
+  <h1>Gestión de películas</h1>
+  <button id="createBtn" class="btn">Crear nueva película</button>
+  <div id="movie-form" style="display: none">
+    <h2 id="form-title">Nueva película</h2>
+    <input type="hidden" id="movie-id" />
+    <input type="text" id="title" placeholder="Título" />
+    <input type="text" id="poster" placeholder="URL imagen" />
+    <input type="number" id="year" placeholder="Año" />
+    <input type="text" id="director" placeholder="Director" />
+    <!-- MEJORA: genre tiene que ser desplegable con opciones para no dejar poner lo que quiera  -->
+    <input type="text" id="genre" placeholder="Género" />
+    <input type="text" id="runtime" placeholder="Duración" />
+    <input type="text" id="plot" placeholder="Argumento" />
+    <input type="text" id="actors" placeholder="Actores" />
+    <!-- MEJORA: revisar o eliminar -->
+    <!-- <input type="text" id="rating" placeholder="Rating" /> -->
+    <button id="saveBtn" class="btn">Guardar</button>
+    <button id="cancelBtn" class="btn">Cancelar</button>
+  </div>
+
+  <div id="movies-list"></div>
+</main>
+
+<%- include('partials/footer') %>

@@ -20,7 +20,25 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, "views"));
 // Middlewares
 app.use(morgan("dev")); // console.log de las peticiones al servidor para facilitar el desarrollo y debugging
-app.use(helmet()); // Securización de cabeceras HTTP
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        "default-src": ["'self'"],
+
+        // 👇 AQUÍ ESTÁ LA CLAVE
+        "img-src": [
+          "'self'",
+          "data:",       // por si usas base64
+          "https:"       // permite imágenes externas
+        ],
+
+        // "script-src": ["'self'"],
+        // "style-src": ["'self'", "https:", "'unsafe-inline'"], // si usas css externo
+      },
+    },
+  })
+); // Securización de cabeceras HTTP y configuracion de csp
 app.use(express.json());
 app.use(express.urlencoded({ extended: false })); // permitir a express leer formularios html
 app.use(cookieParser());

@@ -1,0 +1,21 @@
+<!-- cambia dependiendo de si el usuario está logueado o no, y si es admin o user -->
+ <nav class="menu">
+  <% if (user) { %>
+    <% if (user.role === 'admin') { %>
+      <a href="/users">Usuarios</a>
+      <a href="/movies">Películas</a>
+    <% } else { %>
+      <a href="/dashboard">Inicio</a>
+      <a href="/search">Buscador</a>
+      <a href="/favorites">Favoritos</a>
+      <a href="/profile">Perfil</a>
+    <% } %>
+    <!-- MEJORA: DEBERIAMOS SACAR LA FUNCIONALIDAD DEL LOGOUT A PUBLIC/EVENTS.JS -->
+    <form action="/api/logout" method="POST" style="display:inline">
+  <button type="submit">Cerrar sesión</button>
+</form>
+  <% } else { %>
+    <a href="/login">Login</a>
+    <a href="/signup">Registro</a>
+  <% } %>
+</nav>
