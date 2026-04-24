@@ -1,5 +1,7 @@
 const Films = require("../models/Films");
 const fetchMovies = require("../utils/fetch-movies.utils.js");
+const normalizeMovie = require("../utils/movie-normalizer.js");
+
 // GLOBAL
 // get pelicula en ombd y si no tiene en mongodb
 const getMovies = async (req, res) => {
@@ -17,28 +19,60 @@ const getMovies = async (req, res) => {
       params.s = s;
     } else {
       return res.status(400).json({
-        error: "Debes proporcionar al menos un parámetro: t=título, i=IMDb ID",
+        error: "Debes proporcionar al menos: t, i o s",
       });
     }
 
     const movies = await fetchMovies(params);
 
-    if (movies.Response === "False") {
-      if (t) {
-        moviesFromMongo = await Films.find({ title: t });
-      } else if (i) {
-        moviesFromMongo = await Films.find({ _id: i });
-      }
+    // 🟢 CASO 1: OMDB FUNCIONA
+    if (movies && movies.Response !== "False") {
+      const list = Array.isArray(movies.Search) ? movies.Search : [movies]; // cuando es búsqueda por ID
 
-      if (moviesFromMongo.length === 0) {
-        return res.status(404).json({ error: movies.Error });
-      }
+      const normalized = list.map((movie) => normalizeMovie(movie, "omdb"));
+
+      return res.json({
+        Search: normalized,
+        Response: "True",
+      });
     }
 
-    res.json(movies.Response !== "False" ? movies : moviesFromMongo);
+    // 🔴 CASO 2: FALLA OMDB → BUSCAR EN MONGO
+    if (t) {
+      moviesFromMongo = await Films.find({
+        title: { $regex: t, $options: "i" },
+      });
+    } else if (i) {
+      moviesFromMongo = await Films.find({
+        _id: i,
+      });
+    } else if (s) {
+      moviesFromMongo = await Films.find({
+        title: { $regex: s, $options: "i" },
+      });
+    }
+
+    // 🔴 SI NO HAY RESULTADOS
+    if (!moviesFromMongo.length) {
+      return res.status(404).json({
+        error: movies?.Error || "No se encontraron películas",
+      });
+    }
+
+    // 🟢 NORMALIZACIÓN (ESTO ES LO IMPORTANTE)
+    const normalized = moviesFromMongo.map((movie) =>
+      normalizeMovie(movie, "mongo"),
+    );
+
+    return res.json({
+      Search: normalized,
+      Response: "True",
+    });
   } catch (error) {
     console.error("Error en OMDB API:", error.message);
-    res.status(500).json({ error: "Error al conectar con OMDB" });
+    return res.status(500).json({
+      error: "Error al conectar con OMDB",
+    });
   }
 };
 

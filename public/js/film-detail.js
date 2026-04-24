@@ -1,10 +1,10 @@
 // Coge el imdbID de la URL
-const imdbID = window.location.pathname.split("/").pop();
+const id = window.location.pathname.split("/").pop();
 
 const loadMovie = async () => {
-  const res = await fetch(`/api/films?i=${imdbID}`);
-  const movie = await res.json();
-
+  const res = await fetch(`/api/films?i=${id}`);
+  const movieObject = await res.json();
+  const movie = movieObject.Search[0];
   if (!movie || movie.Response === "False") {
     document.getElementById("film-detail").innerHTML =
       "<p>Película no encontrada</p>";
@@ -14,25 +14,25 @@ const loadMovie = async () => {
   document.getElementById("film-detail").innerHTML = `
     <div class="film-detail">
       <img 
-        src="${movie.Poster !== "N/A" ? movie.Poster : "/img/no-poster.jpg"}" 
-        alt="${movie.Title}"
+        src="${movie.poster !== "N/A" ? movie.poster : "/img/no-poster.jpg"}" 
+        alt="${movie.title}"
       >
       
       <div class="movie-info">
-        <h1>${movie.Title}</h1>
+        <h1>${movie.title}</h1>
 
-        <p><strong>Año:</strong> ${movie.Year}</p>
-        <p><strong>Director:</strong> ${movie.Director}</p>
-        <p><strong>Género:</strong> ${movie.Genre}</p>
-        <p><strong>Duración:</strong> ${movie.Runtime}</p>
-        <p><strong>Actores:</strong> ${movie.Actors}</p>
-        <p><strong>Sinopsis:</strong> ${movie.Plot}</p>
-        <p><strong>Rating:</strong> ${movie.imdbRating}</p>
+        <p><strong>Año:</strong> ${movie.year}</p>
+        <p><strong>Director:</strong> ${movie.director}</p>
+        <p><strong>Género:</strong> ${movie.genre}</p>
+        <p><strong>Duración:</strong> ${movie.runtime}</p>
+        <p><strong>Actores:</strong> ${movie.actors}</p>
+        <p><strong>Sinopsis:</strong> ${movie.plot}</p>
+        <p><strong>Rating:</strong> ${movie.rating}</p>
 
         <button 
           class="btn" 
           id="addFavoriteBtn" 
-          data-id="${movie.imdbID}" 
+          data-id="${movie.id}" 
           data-source="omdb"
         >
           Añadir a favoritos
