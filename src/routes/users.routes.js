@@ -11,9 +11,8 @@ const {
   authorizeAdmin,
 } = require("../middlewares/auth.middleware");
 
-router.get("/users", authenticateJWT, authorizeAdmin, getAllUsers); // todos los usuarios (Solo el admin)
+router.get("/users", authenticateJWT, authorizeAdmin, getAllUsers); // todos los usuarios 
 router.get("/user/:id", authenticateJWT, authorizeAdmin, getUser); // perfil de un usuario
 router.put("/user/:id", authenticateJWT, authorizeAdmin, updateUser); // editar usuario
-router.delete("/user/:id", authenticateJWT, authorizeAdmin, deleteUser); // borrar usuario (Solo el admin)
-
+router.delete("/user/:id", authenticateJWT, authorizeAdmin, deleteUser); // borrar usuario
 module.exports = router;

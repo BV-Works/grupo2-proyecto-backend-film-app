@@ -17,7 +17,7 @@ const register = async (req, res) => {
     const existingUser = await User.findOne({ where: { email } });
 
     if (existingUser) {
-      return res.status(409).json({ message: "Username already exists" });
+      return res.status(409).json({ message: "Email already exists" });
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
@@ -42,7 +42,6 @@ const register = async (req, res) => {
   }
 };
 
-
 const login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -66,26 +65,32 @@ const login = async (req, res) => {
     const accessToken = jwt.sign(
       { id: user.id, name: user.name, email: user.email, role: user.role },
       accessTokenSecret,
-      { expiresIn: "20m" }
+      { expiresIn: "20m" },
     );
 
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
       sameSite: "lax",
-      secure: false,
+      secure: process.env.NODE_ENV === "production",
       maxAge: 20 * 60 * 1000,
     });
 
-    return res.status(200).json({  mensaje: 'Login correcto', role: user.role, accessToken });
+    return res
+      .status(200)
+      .json({ mensaje: "Login correcto", role: user.role, accessToken });
   } catch (error) {
     return res.status(500).json({ message: `Database error: ${error}` });
   }
 };
 
-const logout = (_req, res) => {
+const logout = (req, res) => {
   res.clearCookie("accessToken");
-  res.redirect('/home');
-  return res.status(200).json({ message: "Sesion cerrada" });
+
+  const isApi = req.originalUrl.startsWith("/api");
+
+  return isApi
+    ? res.status(200).json({ message: "Sesion cerrada" })
+    : res.redirect("/home");
 };
 
 module.exports = { register, login, logout };

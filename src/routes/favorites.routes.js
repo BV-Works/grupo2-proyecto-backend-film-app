@@ -5,9 +5,8 @@ const { authenticateJWT } = require("../middlewares/auth.middleware");
 
 const router = express.Router(); 
 
-// ROUTES::
-router.get("/favorites", authenticateJWT , favoritesController.getFavorites); 
-router.post("/favorites", authenticateJWT, favoritesController.addFavorite); 
-router.delete("/favorites/:id", authenticateJWT, favoritesController.deleteFavorite); 
+router.get("/favorites", authenticateJWT , favoritesController.getFavorites); // get all favorites de un usuario
+router.post("/favorites", authenticateJWT, favoritesController.addFavorite);  // añadir un fav a un usuario
+router.delete("/favorites/:id", authenticateJWT, favoritesController.deleteFavorite); // borrar un fav a un usuario
 
 module.exports = router; 
