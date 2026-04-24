@@ -35,5 +35,10 @@ router.get('/dashboard', authenticateJWT, (req, res) => {
   res.render('dashboard', { title: 'Dashboard', user: req.user, page: 'dashboard' });
 });
 
+// Movie - detail
+router.get('/search/:imdbID', authenticateJWT, (req, res) => {
+  res.render('film-detail', { title: req.params.imdbID, user: req.user, page: 'film-detail' });
+});
+
 
 module.exports = router;
