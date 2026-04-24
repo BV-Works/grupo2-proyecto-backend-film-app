@@ -27,15 +27,14 @@ const getMovies = async (req, res) => {
 
     // 🟢 CASO 1: OMDB FUNCIONA
     if (movies && movies.Response !== "False") {
-      const normalized = movies.Search.map((movie) =>
-        normalizeMovie(movie, "omdb"),
-      );
+      const list = Array.isArray(movies.Search) ? movies.Search : [movies]; // cuando es búsqueda por ID
+
+      const normalized = list.map((movie) => normalizeMovie(movie, "omdb"));
 
       return res.json({
         Search: normalized,
         Response: "True",
       });
-      // return res.json(movies); // ya tiene formato { Search: [...] } o movie
     }
 
     // 🔴 CASO 2: FALLA OMDB → BUSCAR EN MONGO
@@ -45,7 +44,7 @@ const getMovies = async (req, res) => {
       });
     } else if (i) {
       moviesFromMongo = await Films.find({
-        imdbID: i,
+        _id: i,
       });
     } else if (s) {
       moviesFromMongo = await Films.find({
