@@ -1,8 +1,8 @@
 // Coge el imdbID de la URL
-const imdbID = window.location.pathname.split("/").pop();
+const id = window.location.pathname.split("/").pop();
 
 const loadMovie = async () => {
-  const res = await fetch(`/api/films?i=${imdbID}`);
+  const res = await fetch(`/api/films?i=${id}`);
   const movie = await res.json();
 
   if (!movie || movie.Response === "False") {
