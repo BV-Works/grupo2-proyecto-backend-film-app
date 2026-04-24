@@ -10,17 +10,29 @@ const Favorite = sequelize.define("favorite", {
     userId: {
         type: DataTypes.INTEGER, 
         allowNull: false, 
-        // references
+        references: {               // add reference to Users
+            model: "users",
+            key: "id"
+        },
+        onDelete: "CASCADE",        // if user is deleted, favorites are too
+        onUpdate: "CASCADE"         // if user is edited, favorites(userId) is too
     }, 
     movieSource: {
-        type: DataTypes.STRING,
+        type: DataTypes.ENUM("omdb", "mongo"),      // only two options are valid (NOT case-sensitive)
         allowNull: false, 
     }, 
     movieSourceId: {
         type: DataTypes.STRING,
         allowNull: false, 
-
-    }
+    }, 
+},
+{
+    indexes: [
+        {
+            unique:true, 
+            fields: ["userId", "movieSource", "movieSourceId"]  // joint indexes to ensure unicity
+        }
+    ]
 }); 
 
 module.exports = Favorite; 
