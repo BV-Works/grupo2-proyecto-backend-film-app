@@ -1,4 +1,4 @@
-const { Favorite } = require("../models"); // changed requirements to delete User (not used)
+const { Favorite } = require("../models");
 const Movie = require("../models/Films");
 
 const getOmdbMovieById = require("../utils/omdb.helper");
@@ -6,11 +6,10 @@ const normalizeMovie = require("../utils/movie-normalizer");
 
 const getFavorites = async (req, res) => {
   try {
-    const userId = req.user.id; // changed hardcode id FROM req.body --> req.user (JWT cookies)
-
+    const userId = req.user.id;
     const favorites = await Favorite.findAll({
       where: { userId },
-      order: [["createdAt", "DESC"]], // order from newest to old
+      order: [["createdAt", "DESC"]],
     });
 
     const detailedFavorites = await Promise.all(
