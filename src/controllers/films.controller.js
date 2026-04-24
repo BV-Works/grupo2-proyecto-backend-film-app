@@ -124,7 +124,7 @@ const getRandomMoviesHome = async (req, res) => {
 
 // MONGO
 // GET
-// http://localhost:3000/api/movies
+// http://localhost:3000/api/films
 const getFilmsAdmin = async (req, res) => {
   try {
     const films = await Films.find();
@@ -143,7 +143,7 @@ const getFilmsAdmin = async (req, res) => {
 };
 
 // GET pelicula por id en mongodb
-// http://localhost:3000/api/movies/(id)
+// http://localhost:3000/api/films/(id)
 const getFilmById = async (req, res) => {
   const id = req.params.id;
   try {
@@ -163,7 +163,7 @@ const getFilmById = async (req, res) => {
 };
 
 // POST
-// http://localhost:3000/api/movies/
+// http://localhost:3000/api/films/
 const createFilm = async (req, res) => {
   try {
     const {
@@ -191,7 +191,8 @@ const createFilm = async (req, res) => {
     });
 
     return res.status(201).json({
-      message: `Pelicula creada: ${film.title}`,
+      message: `Pelicula creada`,
+      film,
     });
   } catch (error) {
     console.log(error);
@@ -200,7 +201,7 @@ const createFilm = async (req, res) => {
 };
 
 // PUT
-// http://localhost:3000/api/movies/(id)
+// http://localhost:3000/api/films/(id)
 const updateFilm = async (req, res) => {
   const id = req.params.id;
   try {
@@ -235,7 +236,8 @@ const updateFilm = async (req, res) => {
     }
 
     return res.status(200).json({
-      message: `Pelicula editada: ${id}`,
+      message: `Pelicula editada`,
+      film,
     });
   } catch (error) {
     console.log(error);
@@ -244,7 +246,7 @@ const updateFilm = async (req, res) => {
 };
 
 // DELETE
-// http://localhost:3000/api/movies/(id)
+// http://localhost:3000/api/films/(id)
 const deleteFilm = async (req, res) => {
   const id = req.params.id;
   try {
