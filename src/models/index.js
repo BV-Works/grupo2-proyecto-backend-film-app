@@ -2,12 +2,12 @@ const User = require("./User");
 const Favorite = require("./favorites.models");
 
 User.hasMany(Favorite, {
-  foreignKey: "id",
-  as: "user",
+  foreignKey: "userId",
+  as: "favorites",
 });
 
 Favorite.belongsTo(User, {
-  foreignKey: "id",
+  foreignKey: "userId",
   as: "user",
 });
 
