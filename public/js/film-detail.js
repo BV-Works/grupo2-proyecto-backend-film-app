@@ -1,73 +1,104 @@
-// Coge el imdbID de la URL
-const id = window.location.pathname.split("/").pop();
+const movieId = window.location.pathname.split("/").pop();
+const filmDetail = document.getElementById("film-detail");
+
+let currentMovie = null;
+let currentFavorites = [];
+
+const getPoster = (poster) => {
+  return poster && poster !== "N/A" ? poster : "/img/no-poster.jpg";
+};
+
+const loadFavorites = async () => {
+  currentFavorites = await FavoritesAPI.getAll();
+};
 
 const loadMovie = async () => {
-  const res = await fetch(`/api/films?i=${id}`);
-  const movieObject = await res.json();
-  const movie = movieObject.Search[0];
-  if (!movie || movie.Response === "False") {
-    document.getElementById("film-detail").innerHTML =
-      "<p>Película no encontrada</p>";
-    return;
-  }
+  try {
+    const res = await fetch(`/api/films?i=${movieId}`);
+    const data = await res.json();
 
-  document.getElementById("film-detail").innerHTML = `
+    if (!res.ok || data.Reponse === "False" || !data.Search?.length) {
+      filmDetail.innerHTML = "<p>Película no encontrada</p>";
+      return;
+    }
+
+    currentMovie = data.Search[0];
+
+    await loadFavorites();
+
+    renderMovie();
+  } catch (e) {
+    console.error(e);
+    filmDetail.innerHTML = "<p>Error cargando la película</p>";
+  }
+};
+
+const renderMovie = () => {
+  const favorite = FavoritesAPI.findFavorite(
+    currentFavorites,
+    currentMovie.movieSource,
+    currentMovie.movieSourceId
+  );
+
+  const isFavorite = Boolean(favorite);
+
+  filmDetail.innerHTML = `
     <div class="film-detail">
       <img 
-        src="${movie.poster !== "N/A" ? movie.poster : "/img/no-poster.jpg"}" 
-        alt="${movie.title}"
+        src="${getPoster(currentMovie.poster)}" 
+        alt="${currentMovie.title}"
       >
       
       <div class="movie-info">
-        <h1>${movie.title}</h1>
+        <h1>${currentMovie.title}</h1>
 
-        <p><strong>Año:</strong> ${movie.year}</p>
-        <p><strong>Director:</strong> ${movie.director}</p>
-        <p><strong>Género:</strong> ${movie.genre}</p>
-        <p><strong>Duración:</strong> ${movie.runtime}</p>
-        <p><strong>Actores:</strong> ${movie.actors}</p>
-        <p><strong>Sinopsis:</strong> ${movie.plot}</p>
-        <p><strong>Rating:</strong> ${movie.rating}</p>
+        <p><strong>Año:</strong> ${currentMovie.year || "No disponible"}</p>
+        <p><strong>Director:</strong> ${currentMovie.director || "No disponible"}</p>
+        <p><strong>Género:</strong> ${currentMovie.genre || "No disponible"}</p>
+        <p><strong>Duración:</strong> ${currentMovie.runtime || "No disponible"}</p>
+        <p><strong>Actores:</strong> ${currentMovie.actors || "No disponible"}</p>
+        <p><strong>Sinopsis:</strong> ${currentMovie.plot || "No disponible"}</p>
+        <p><strong>Rating:</strong> ${currentMovie.rating || "No disponible"}</p>
 
         <button 
-          class="btn" 
-          id="addFavoriteBtn" 
-          data-id="${movie.id}" 
-          data-source="omdb"
-        >
-          Añadir a favoritos
+          class="btn favorite-btn"
+          data-movie-source="${currentMovie.movieSource}"
+          data-movie-source-id="${currentMovie.movieSourceId}"
+          data-favorite-id="${favorite ? favorite.favoriteId : ""}"
+          data-is-favorite="${isFavorite}"
+        > 
+          ${isFavorite ? "Quitar de favoritos" : "Añadir a favoritos"} 
         </button>
       </div>
     </div>
   `;
+}; // ahora tenemos display dinámico del botón (añadir/quitar)
 
-  // Añade el evento después de pintar el botón
-  const addFavoriteBtn = document.getElementById("addFavoriteBtn");
+const handleFavoriteClick = async (button) => {
+  const movieSource = button.dataset.movieSource;
+  const movieSourceId = button.dataset.movieSourceId;
+  const favoriteId = button.dataset.favoriteId;
+  const isFavorite = button.dataset.isFavorite === "true";
 
-  if (addFavoriteBtn) {
-    addFavoriteBtn.addEventListener("click", () => {
-      addFavorite(
-        addFavoriteBtn.dataset.id,
-        addFavoriteBtn.dataset.source
-      );
-    });
+  try {
+    if (isFavorite) {
+      await FavoritesAPI.remove(favoriteId);
+    } else {
+      await FavoritesAPI.add(movieSource, movieSourceId);
+    }
+
+    await loadFavorites();
+    renderMovie();
+  } catch (e) {
+    console.error(e);
+    alert("Error actualizando favorito");
   }
 };
 
-const addFavorite = async (movieSourceId, movieSource) => {
-  const res = await fetch("/api/favorites", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      movieSource,
-      movieSourceId,
-    }),
-  });
-
-  const data = await res.json();
-  alert(data.message || data.error);
-};
+document.addEventListener("click", async (event) => {
+  if (event.target.classList.contains("favorite-btn")) {
+    await handleFavoriteClick(event.target);
+  }
+});
 
 loadMovie();
