@@ -85,12 +85,8 @@ const login = async (req, res) => {
 
 const logout = (req, res) => {
   res.clearCookie("accessToken");
-
-  const isApi = req.originalUrl.startsWith("/api");
-
-  return isApi
-    ? res.status(200).json({ message: "Sesion cerrada" })
-    : res.redirect("/home");
+  res.redirect('/home');
+  return res.status(200).json({ message: "Sesion cerrada" });
 };
 
 module.exports = { register, login, logout };
