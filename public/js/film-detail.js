@@ -15,8 +15,6 @@ const loadMovie = async () => {
     const res = await fetch(`/api/films?i=${movieId}`);
     const data = await res.json();
 
-    console.log("film detail response:", data); 
-
     if (!res.ok || data.Reponse === "False" || !data.Search?.length) {
       filmDetail.innerHTML = "<p>Película no encontrada</p>";
       return;

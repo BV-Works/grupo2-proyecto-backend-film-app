@@ -5,19 +5,12 @@ const grid = document.getElementById("movies-grid");
 let currentMovies = []; 
 let currentFavorites = []; 
 
-/* const getPoster = (Poster) => {
-  return Poster && Poster !=="N/A" ? Poster : "/img/no-poster.png"; 
-};  */
-
 const loadFavorites = async () => {
   currentFavorites = await FavoritesAPI.getAll(); 
 }
 
 const loadMovies = async () => {
-  const res = await fetch("/api/films/random");/* , {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-  }); */
+  const res = await fetch("/api/films/random");
   const movies = await res.json();
 
   currentMovies = movies; 
@@ -93,7 +86,6 @@ const searchMovies = async () => {
 
   if (!title) {
     loadMovies();
-    // alert("Escribe el título de una película");
     return;
   }
 
