@@ -5,19 +5,12 @@ const grid = document.getElementById("movies-grid");
 let currentMovies = []; 
 let currentFavorites = []; 
 
-/* const getPoster = (Poster) => {
-  return Poster && Poster !=="N/A" ? Poster : "/img/no-poster.png"; 
-};  */
-
 const loadFavorites = async () => {
   currentFavorites = await FavoritesAPI.getAll(); 
 }
 
 const loadMovies = async () => {
-  const res = await fetch("/api/films/random");/* , {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-  }); */
+  const res = await fetch("/api/films/random");
   const movies = await res.json();
 
   currentMovies = movies; 
@@ -44,7 +37,7 @@ const renderMovies = () => {
 
       return `
       <div class="movie-card">
-        <img src="${getPoster(movie.poster)}" alt="${movie.title}">
+        <img class="movie-poster" src="${getPoster(movie.poster)}" alt="${movie.title}">
         <h3>${movie.title}</h3>
         <p>${movie.year}</p>
         <a href="/search/${movie.movieSourceId}" class="btn">Ver detalle</a>
@@ -110,7 +103,7 @@ const searchMovies = async () => {
   grid.innerHTML = movies.Search.map(
     (movie) => `
       <div class="movie-card">
-        <img src="${movie.poster !== "N/A" ? movie.poster : "/img/no-poster.png"}">
+        <img class="movie-poster" src="${movie.poster !== "N/A" ? movie.poster : "/img/no-poster.png"}">
         <h3>${movie.title}</h3>
         <p>${movie.year}</p>
         <a href="/search/${movie.id}" class="btn">Ver detalle</a>
@@ -128,5 +121,11 @@ document
   .addEventListener("click", (event) => {
     searchMovies();
   });
+
+document.addEventListener("error", (e) => {
+  if (e.target.classList.contains("movie-poster")) {
+    e.target.src = "/img/no-poster.png";
+  }
+}, true);
 
 loadMovies();

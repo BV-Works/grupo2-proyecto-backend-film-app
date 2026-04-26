@@ -15,8 +15,6 @@ const loadMovie = async () => {
     const res = await fetch(`/api/films?i=${movieId}`);
     const data = await res.json();
 
-    console.log("film detail response:", data); 
-
     if (!res.ok || data.Reponse === "False" || !data.Search?.length) {
       filmDetail.innerHTML = "<p>Película no encontrada</p>";
       return;
@@ -45,6 +43,7 @@ const renderMovie = () => {
   filmDetail.innerHTML = `
     <div class="film-detail">
       <img 
+        class="movie-poster"
         src="${getPoster(currentMovie.poster)}" 
         alt="${currentMovie.title}"
       >
@@ -100,5 +99,12 @@ document.addEventListener("click", async (event) => {
     await handleFavoriteClick(event.target);
   }
 });
+
+document.addEventListener("error", (e) => {
+  if (e.target.classList.contains("movie-poster")) {
+    e.target.src = "/img/no-poster.png";
+  }
+}, true);
+
 
 loadMovie();

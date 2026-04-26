@@ -25,7 +25,7 @@ const getMovies = async (req, res) => {
 
     const movies = await fetchMovies(params);
 
-    // 🟢 CASO 1: OMDB FUNCIONA
+    // CASO 1: OMDB FUNCIONA
     if (movies && movies.Response !== "False") {
       const list = Array.isArray(movies.Search) ? movies.Search : [movies]; // cuando es búsqueda por ID
 
@@ -37,7 +37,7 @@ const getMovies = async (req, res) => {
       });
     }
 
-    // 🔴 CASO 2: FALLA OMDB → BUSCAR EN MONGO
+    // CASO 2: FALLA OMDB → BUSCAR EN MONGO
     if (t) {
       moviesFromMongo = await Films.find({
         title: { $regex: t, $options: "i" },
@@ -52,14 +52,14 @@ const getMovies = async (req, res) => {
       });
     }
 
-    // 🔴 SI NO HAY RESULTADOS
+    // SI NO HAY RESULTADOS
     if (!moviesFromMongo.length) {
       return res.status(404).json({
         error: movies?.Error || "No se encontraron películas",
       });
     }
 
-    // 🟢 NORMALIZACIÓN (ESTO ES LO IMPORTANTE)
+    // NORMALIZACIÓN
     const normalized = moviesFromMongo.map((movie) =>
       normalizeMovie(movie, "mongo"),
     );
@@ -76,7 +76,7 @@ const getMovies = async (req, res) => {
   }
 };
 
-// get unas cuantas peliculas random para la home de usuario (solo ombd)
+// get unas cuantas peliculas random para la home de usuario (solo omdb)
 const getRandomMoviesHome = async (req, res) => {
   try {
     const keywords = [
@@ -95,31 +95,38 @@ const getRandomMoviesHome = async (req, res) => {
 
     const randomKeyword = keywords[Math.floor(Math.random() * keywords.length)];
 
-    const page = Math.floor(Math.random() * 5) + 1;
+    let allMovies = [];
 
-    const movies = await fetchMovies({
-      s: randomKeyword,
-      page,
-    });
+    // OMDB devuelve hasta 10 por página, así que buscamos varias páginas hasta reunir 12
+    for (let page = 1; page <= 3 && allMovies.length < 12; page++) {
+      const movies = await fetchMovies({
+        s: randomKeyword,
+        page,
+      });
 
-    if (movies.Response === "False") {
-      return res.status(404).json({ error: movies.Error });
+      if (movies.Response === "True" && Array.isArray(movies.Search)) {
+        allMovies = [...allMovies, ...movies.Search];
+      }
     }
 
-    if (!movies.Search || !Array.isArray(movies.Search)) {
+    if (!allMovies.length) {
       return res.status(404).json({
         error: "No se encontraron películas",
       });
     }
 
-    const shuffled = movies.Search.sort(() => 0.5 - Math.random());
-    const limited = shuffled.slice(0, 10);
-    const normalized = limited.map((movie) => normalizeMovie (movie, "omdb")); 
+    // Mezclar y limitar a 12
+    const shuffled = allMovies.sort(() => 0.5 - Math.random());
+    const limited = shuffled.slice(0, 12);
 
-    res.json(normalized);
+    const normalized = limited.map((movie) => normalizeMovie(movie, "omdb"));
+
+    return res.json(normalized);
   } catch (error) {
     console.error("Error random movies:", error.message);
-    res.status(500).json({ error: "Error obteniendo películas random" });
+    return res.status(500).json({
+      error: "Error obteniendo películas random",
+    });
   }
 };
 

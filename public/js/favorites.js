@@ -34,7 +34,7 @@ const renderFavoriteMovies = () => {
       }
       return `
       <div class="movie-card">
-        <img src="${getPoster(fav.poster)}" alt="${fav.title}">
+        <img class="movie-poster" src="${getPoster(fav.poster)}" alt="${fav.title}">
         <h3>${fav.title}</h3>
         <p>${fav.year}</p>
         <a href="/search/${fav.movieSourceId}" class="btn">Ver detalle</a>
@@ -69,5 +69,11 @@ document.addEventListener("click", async (event) => {
     await handleFavoriteClick(event.target);
   }
 });
+
+document.addEventListener("error", (e) => {
+  if (e.target.classList.contains("movie-poster")) {
+    e.target.src = "/img/no-poster.png";
+  }
+}, true);
 
 loadFavorites();
