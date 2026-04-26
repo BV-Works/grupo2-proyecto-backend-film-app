@@ -30,8 +30,8 @@ const renderMovies = () => {
     .map((movie) => {
       const favorite = FavoritesAPI.findFavorite(
         currentFavorites, 
-        "omdb",
-        movie.imdbID,
+        movie.movieSource,
+        movie.movieSourceId,
       ); 
       const isFavorite = Boolean(favorite); 
 
@@ -86,30 +86,22 @@ const searchMovies = async () => {
 
   if (!title) {
     loadMovies();
-    // alert("Escribe el título de una película");
     return;
   }
 
   const res = await fetch(`/api/films?s=${title}`);
   const movies = await res.json();
 
-  const grid = document.getElementById("movies-grid");
-
   if (!movies || !movies.Search || movies.Search.length === 0) {
     grid.innerHTML = "<p>No hay resultados</p>";
     return;
   }
 
-  grid.innerHTML = movies.Search.map(
-    (movie) => `
-      <div class="movie-card">
-        <img class="movie-poster" src="${movie.poster !== "N/A" ? movie.poster : "/img/no-poster.png"}">
-        <h3>${movie.title}</h3>
-        <p>${movie.year}</p>
-        <a href="/search/${movie.id}" class="btn">Ver detalle</a>
-      </div>
-    `,
-  ).join("");
+  currentMovies = movies.Search;
+
+  await loadFavorites(); 
+
+  renderMovies(); 
 };
 
 document.getElementById("searchInput").addEventListener("keypress", (e) => {
