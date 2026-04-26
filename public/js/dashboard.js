@@ -42,7 +42,8 @@ const searchMovies = async () => {
   const title = document.getElementById("searchInput").value;
 
   if (!title) {
-    alert("Escribe el título de una película");
+    loadMovies();
+    // alert("Escribe el título de una película");
     return;
   }
 
