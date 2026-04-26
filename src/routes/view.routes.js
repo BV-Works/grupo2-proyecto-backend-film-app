@@ -57,5 +57,13 @@ router.get('/search/:imdbID', authenticateJWT, (req, res) => {
   res.render('film-detail', { title: req.params.imdbID, user: req.user, page: 'film-detail' });
 });
 
+// Favorites
+router.get('/favorites', authenticateJWT, (req, res) => {
+  res.render('favorites', { 
+    title: "Favorites", 
+    user: req.user, 
+    page: 'favorites' });
+});
+
 
 module.exports = router;

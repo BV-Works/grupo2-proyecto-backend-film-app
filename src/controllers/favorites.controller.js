@@ -1,7 +1,7 @@
 const { Favorite } = require("../models");   // changed requirements to delete User (not used)
 const Movie = require("../models/Films");
 
-const getOmdbMovieById = require("../utils/omdb.helper"); 
+const { getMovieById } = require("../utils/omdb.helper"); 
 const normalizeMovie = require("../utils/movie-normalizer"); 
 
 const getFavorites = async (req, res) => {
@@ -18,34 +18,34 @@ const getFavorites = async (req, res) => {
                 let movie = null; 
 
                 if (favorite.movieSource === "omdb") {
-                    movie = await getOmdbMovieById(favorite.movieSourceId);  
+                    movie = await getMovieById(favorite.movieSourceId);  
                 }
                 if (favorite.movieSource === "mongo") {
                     movie = await Movie.findById(favorite.movieSourceId).lean();  //lean returns objects instead of mongoose docs
                     }
             
                     if (!movie) {
+                        return {
+                            favoriteId: favorite.id,
+                            movieSource: favorite.movieSource,
+                            movieSourceId: favorite.movieSourceId,
+                            unavailable: true,
+                        };
+                    }
                     return {
                         favoriteId: favorite.id,
                         movieSource: favorite.movieSource,
                         movieSourceId: favorite.movieSourceId,
-                        unavailable: true,
-                    };
-                    }
-                    return {
-                    favoriteId: favorite.id,
-                    movieSource: favorite.movieSource,
-                    movieSourceId: favorite.movieSourceId,
-                    unavailable: false,
-                    ...normalizeMovie(movie, favorite.movieSource),
+                        unavailable: false,
+                        ...normalizeMovie(movie, favorite.movieSource),
                     }
             })
         ); 
-
         return res.status(200).json(detailedFavorites);
 
     } catch (e) {
-        return res.status(500).send(`Internal server error: ${e.message}`); 
+        console.error(e); 
+        return res.status(500).json({message: `Error interno del servidor: ${e.message}`}); 
     }
 }
 const addFavorite = async (req, res) => {
@@ -53,25 +53,26 @@ const addFavorite = async (req, res) => {
         const userId =  req.user.id;                        // changed hardcode id FROM req.body --> req.user (JWT cookies)
         const { movieSource, movieSourceId } = req.body; 
 
-        if (!movieSource || !movieSourceId) return res.status(400).send("Bad request: mandatory movieSource and movieSourceId"); 
+        if (!movieSource || !movieSourceId) return res.status(400).json({
+            message: "Por avor, aporte movieSource y movieSourceId"}); 
 
         const validSources = ["omdb", "mongo"];            // ensure only valid sources are used  --already handled by model doubleCheck
-        if (!validSources.includes(movieSource)) {
-            return res.status(400).json({ message: "movieSource must be omdb or mongo" }) // let user know of constraints
+        if (!validSources.includes(movieSource.toLowerCase())) {
+            return res.status(400).json({ message: "movieSource debe ser omdb o mongo" }) // let user know of constraints
         }
 
         const [favorite, created] = await Favorite.findOrCreate({   // favorite = movie object  created = boolean
             where: {
-                userId: userId, 
-                movieSource: movieSource,
-                movieSourceId: movieSourceId
+                userId, 
+                movieSource,
+                movieSourceId
             }
         }); 
-
         return res.status(created ? 201 : 200).json({ favorite, created });  // if created = true return status 201, else 200 (found)
+    
     } catch (e) {
         console.error(e); 
-        return res.status(500).send(`Error saving favorite: ${e.message}`); 
+        return res.status(500).json({message: `Error al guardar favorito: ${e.message}`}); 
     }
 }
 
@@ -84,12 +85,12 @@ const deleteFavorite = async (req, res) => {
             where: { id, userId }                   // ensure deleiton of OWN favorites
         }); 
 
-        if (deleted === 0) return res.status(404).send("Favorite not found");
+        if (deleted === 0) return res.status(404).json({message: "Favorito no encontrado"});
         
-        return res.status(200).send(`Favorite with ID ${id} deleted`); 
+        return res.status(200).json({message: `Favorito con ID: ${id} borrado`}); 
     } catch (e) {
         console.error(e); 
-        return res.status(500).send(`Error deleting favorite: ${e.message}`); 
+        return res.status(500).json({message: `Error al borrar de favoritos: ${e.message}`}); 
     }
 }; 
 
@@ -98,5 +99,3 @@ module.exports = {
     addFavorite, 
     deleteFavorite
 }
-
-// SERVICES to handle functions 
