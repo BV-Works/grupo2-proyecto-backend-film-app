@@ -71,9 +71,50 @@ OMDB_API_KEY=tu_api_key
 
 ---
 
+## Bases de datos en local con Docker
+
+Si quieres levantar las bases de datos en local sin necesidad de servicios externos, puedes usar Docker.
+
+**Requisito:** tener [Docker](https://www.docker.com/) instalado.
+
+**PostgreSQL:**
+```bash
+docker run --name movieapp-postgres \
+  -e POSTGRES_USER=tu_usuario \
+  -e POSTGRES_PASSWORD=tu_contraseña \
+  -e POSTGRES_DB=tu_base_de_datos \
+  -p 5432:5432 \
+  -d postgres
+```
+
+**MongoDB:**
+```bash
+docker run --name movieapp-mongo \
+  -p 27017:27017 \
+  -d mongo
+```
+
+Una vez levantados los contenedores, actualiza el `.env` con estas variables:
+
+```
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=tu_usuario
+DB_PASSWORD=tu_contraseña
+DB_DATABASE=tu_base_de_datos
+
+MONGO_URI=mongodb://localhost:27017/movieapp
+```
+
+Las tablas de PostgreSQL se crean automáticamente al arrancar el servidor gracias a `sequelize.sync()`.
+
+---
+
+
 ## Demo
 
  [https://grupo2-proyecto-backend-film-app-1.onrender.com/home](https://grupo2-proyecto-backend-film-app-1.onrender.com/home)
+ 
 ---
 
 ## Cómo arrancarlo
