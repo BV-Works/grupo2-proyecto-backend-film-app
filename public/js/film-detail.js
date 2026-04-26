@@ -1,12 +1,10 @@
+import { getPoster } from "../utils/ui-helpers.js"; 
+import { FavoritesAPI } from "../utils/favorites-api.js";
 const movieId = window.location.pathname.split("/").pop();
 const filmDetail = document.getElementById("film-detail");
 
 let currentMovie = null;
 let currentFavorites = [];
-
-const getPoster = (poster) => {
-  return poster && poster !== "N/A" ? poster : "/img/no-poster.jpg";
-};
 
 const loadFavorites = async () => {
   currentFavorites = await FavoritesAPI.getAll();
@@ -16,6 +14,8 @@ const loadMovie = async () => {
   try {
     const res = await fetch(`/api/films?i=${movieId}`);
     const data = await res.json();
+
+    console.log("film detail response:", data); 
 
     if (!res.ok || data.Reponse === "False" || !data.Search?.length) {
       filmDetail.innerHTML = "<p>Película no encontrada</p>";

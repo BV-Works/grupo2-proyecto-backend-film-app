@@ -1,4 +1,4 @@
-const FavoritesAPI = {
+export const FavoritesAPI = {
     async getAll() {
       const res = await fetch("/api/favorites");
       return await res.json();

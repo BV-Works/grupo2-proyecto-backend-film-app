@@ -1,10 +1,8 @@
+import { getPoster } from "../utils/ui-helpers.js"; 
+import { FavoritesAPI } from "../utils/favorites-api.js";
 const grid = document.getElementById("movies-grid");
 
 let currentFavorites = []; 
-
-const getPoster = (poster) => {
-  return poster && poster !=="N/A" ? poster : "/img/no-poster.jpg"; 
-}; 
 
 const loadFavorites = async () => {
   currentFavorites = await FavoritesAPI.getAll(); 

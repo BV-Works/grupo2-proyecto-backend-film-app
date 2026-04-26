@@ -6,9 +6,6 @@
     <title><%= title %></title>
     <link rel="icon" type="image/png" href="/img/2798007.png">
     <link rel="stylesheet" href="/css/style.css?v=2" />
-    <% if (['dashboard', 'film-detail', 'user-favorites', 'favorites'].includes(page)) { %>
-      <script src="/js/favorites-api.js" defer></script>
-    <% } %>
     <% if (page === 'login') { %>
       <script src="/js/login.js" defer></script>
     <% } %>
@@ -22,13 +19,13 @@
       <script src="/js/admin-users.js" defer></script>
     <% } %>
     <% if (page === 'dashboard') { %>
-      <script src="/js/dashboard.js" defer></script>
+      <script type="module" src="/js/dashboard.js" defer></script>
     <% } %>
     <% if (page === 'film-detail') { %>
-      <script src="/js/film-detail.js" defer></script>
+      <script type="module" src="/js/film-detail.js" defer></script>
     <% } %>
     <% if (page === 'favorites') { %>
-      <script src="/js/favorites.js" defer></script>
+      <script type="module" src="/js/favorites.js" defer></script>
     <% } %>
   </head>
   <body>

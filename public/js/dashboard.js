@@ -1,11 +1,13 @@
+import { getPoster } from "../utils/ui-helpers.js"; 
+import { FavoritesAPI } from "../utils/favorites-api.js";
 const grid = document.getElementById("movies-grid");
 
 let currentMovies = []; 
 let currentFavorites = []; 
 
-const getPoster = (Poster) => {
-  return Poster && Poster !=="N/A" ? Poster : "/img/no-poster.jpg"; 
-}; 
+/* const getPoster = (Poster) => {
+  return Poster && Poster !=="N/A" ? Poster : "/img/no-poster.png"; 
+};  */
 
 const loadFavorites = async () => {
   currentFavorites = await FavoritesAPI.getAll(); 
@@ -42,13 +44,13 @@ const renderMovies = () => {
 
       return `
       <div class="movie-card">
-        <img src="${getPoster(movie.Poster)}" alt="${movie.Title}">
-        <h3>${movie.Title}</h3>
-        <p>${movie.Year}</p>
-        <a href="/search/${movie.imdbID}" class="btn">Ver detalle</a>
+        <img src="${getPoster(movie.poster)}" alt="${movie.title}">
+        <h3>${movie.title}</h3>
+        <p>${movie.year}</p>
+        <a href="/search/${movie.movieSourceId}" class="btn">Ver detalle</a>
         <button class="btn favorite-btn" 
-          data-movie-source="omdb"
-          data-movie-source-id="${movie.imdbID}"
+          data-movie-source="${movie.movieSource}"
+          data-movie-source-id="${movie.movieSourceId}"
           data-favorite-id="${favorite ? favorite.favoriteId : ""}"
           data-is-favorite="${isFavorite}"
         >${isFavorite ? "Quitar de favoritos" : "Añadir a favoritos"}
@@ -107,7 +109,7 @@ const searchMovies = async () => {
   grid.innerHTML = movies.Search.map(
     (movie) => `
       <div class="movie-card">
-        <img src="${movie.poster !== "N/A" ? movie.poster : "/img/no-poster.jpg"}">
+        <img src="${movie.poster !== "N/A" ? movie.poster : "/img/no-poster.png"}">
         <h3>${movie.title}</h3>
         <p>${movie.year}</p>
         <a href="/search/${movie.id}" class="btn">Ver detalle</a>

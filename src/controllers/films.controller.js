@@ -114,8 +114,9 @@ const getRandomMoviesHome = async (req, res) => {
 
     const shuffled = movies.Search.sort(() => 0.5 - Math.random());
     const limited = shuffled.slice(0, 10);
+    const normalized = limited.map((movie) => normalizeMovie (movie, "omdb")); 
 
-    res.json(limited);
+    res.json(normalized);
   } catch (error) {
     console.error("Error random movies:", error.message);
     res.status(500).json({ error: "Error obteniendo películas random" });
