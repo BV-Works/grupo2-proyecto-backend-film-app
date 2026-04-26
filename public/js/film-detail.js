@@ -100,4 +100,11 @@ document.addEventListener("click", async (event) => {
   }
 });
 
+document.addEventListener("error", (e) => {
+  if (e.target.classList.contains("movie-poster")) {
+    e.target.src = "/img/no-poster.png";
+  }
+}, true);
+
+
 loadMovie();
