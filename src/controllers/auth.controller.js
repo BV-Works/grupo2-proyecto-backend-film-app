@@ -11,10 +11,24 @@ const register = async (req, res) => {
     return res.status(400).json({ message: "Email and password are required" });
   }
 
+  const normalizedEmail = email.toLowerCase();
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailRegex.test(normalizedEmail)) {
+    return res.status(400).json({ message: "Invalid email format" });
+  }
+
+  if (password.length < 6) {
+    return res
+      .status(400)
+      .json({ message: "Password must be at least 6 characters" });
+  }
+
   const safeRole = role === "admin" ? "admin" : "user";
 
   try {
-    const existingUser = await User.findOne({ where: { email } });
+    const existingUser = await User.findOne({ where: { email: normalizedEmail } });
 
     if (existingUser) {
       return res.status(409).json({ message: "Email already exists" });
@@ -24,7 +38,7 @@ const register = async (req, res) => {
 
     const user = await User.create({
       name,
-      email,
+      email: normalizedEmail,
       passwordHash,
       role: safeRole,
     });
@@ -85,7 +99,7 @@ const login = async (req, res) => {
 
 const logout = (req, res) => {
   res.clearCookie("accessToken");
-  res.redirect('/home');
+  res.redirect("/home");
   return res.status(200).json({ message: "Sesion cerrada" });
 };
 
